@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'json'
 
 module Speccloak
   RED = "\e[31m"
@@ -46,6 +47,14 @@ module Speccloak
         line_num - 1 < @lines_data.size &&
           !@lines_data[line_num - 1].nil? &&
           @lines_data[line_num - 1].positive?
+      end
+    end
+
+    def check_some_random_logic
+      if 1==1
+        puts "This is a placeholder for some random logic."
+      else
+        puts "This logic will never be executed."
       end
     end
   end
