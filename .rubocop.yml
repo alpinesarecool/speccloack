@@ -1,3 +1,5 @@
+require:
+  - rubocop-rake
 AllCops:
   SuggestExtensions: false
   Exclude:

@@ -14,3 +14,7 @@ gem "rspec", "~> 3.0"
 gem "rubocop"
 
 gem "simplecov", group: :test
+
+group :development, :test do
+  gem 'rubocop-rake', require: false
+end
