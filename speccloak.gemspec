@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Check coverage of changed lines in your branch with a single command."
   spec.description   = "Speccloak is a CLI tool that reports whether the changed lines in your Git branch " \
-                        "are covered by specs, using SimpleCov’s JSON output."
+                       "are covered by specs, using SimpleCov’s JSON output."
   spec.homepage      = "https://github.com/alpinesarecool/speccloak"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/alpinesarecool/speccloak"
   spec.metadata["changelog_uri"]   = "https://github.com/alpinesarecool/speccloak/blob/main/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   # Files included in gem
   gemspec = File.basename(__FILE__)

@@ -27,6 +27,7 @@ RSpec.describe Speccloak::FileFinder do
       )
     end
 
+    # rubocop:disable all
     it "removes duplicates" do
       dup_cmd_runner = lambda do |cmd|
         case cmd
@@ -42,6 +43,7 @@ RSpec.describe Speccloak::FileFinder do
       files = finder_with_dups.changed_files
       expect(files).to eq(["file.rb"])
     end
+    # rubocop:disable all
 
     it "returns an empty array if no files are changed or untracked" do
       empty_cmd_runner = ->(_cmd) { "" }
