@@ -52,7 +52,6 @@ RSpec.describe Speccloak::BranchCoverageChecker do
     it "uses the default cmd_runner and file_reader when not provided" do
       checker = described_class.new
       expect(checker.instance_variable_get(:@cmd_runner).call("echo hi")).to eq("hi\n")
-      # Create a temp file to test file_reader
       Tempfile.create("speccloak_test") do |file|
         file.write("abc")
         file.rewind
@@ -146,6 +145,20 @@ RSpec.describe Speccloak::BranchCoverageChecker do
           rescue SystemExit
           end
         }.to output(/Changed lines: 1, 2/).to_stdout
+      end
+    end
+
+    context "when the coverage file is invalid JSON" do
+      it "logs an error when the coverage file cannot be parsed" do
+        bad_file_reader = ->(_) { "not valid json" }
+        checker = described_class.new(
+          cmd_runner: ->(_) { "" },
+          file_reader: bad_file_reader
+        )
+        allow(checker).to receive(:find_coverage_file).and_return("fake.json")
+        allow(checker).to receive(:find_changed_files).and_return(["foo.rb"])
+        expect(checker).to receive(:log).with(/Error parsing coverage file:/)
+        checker.send(:analyze_files, ["foo.rb"], "fake.json")
       end
     end
   end
