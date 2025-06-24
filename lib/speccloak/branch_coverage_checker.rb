@@ -1,15 +1,18 @@
 # frozen_string_literal: true
+
 require "json"
 require_relative "changed_lines_extractor"
 require_relative "file_coverage_analyzer"
 require_relative "coverage_reporter"
+require_relative "file_finder"
 
+# Main namespace for Speccloak branch coverage analysis and reporting tools.
 module Speccloak
   module Colors
-    RED    = "\e[31m".freeze
-    GREEN  = "\e[32m".freeze
-    YELLOW = "\e[33m".freeze
-    RESET  = "\e[0m".freeze
+    RED    = "\e[31m"
+    GREEN  = "\e[32m"
+    YELLOW = "\e[33m"
+    RESET  = "\e[0m"
   end
 
   module ExitCodes
@@ -48,6 +51,7 @@ module Speccloak
     end
   end
 
+  # Checks and reports branch coverage for changed/untracked files in a project.
   class BranchCoverageChecker
     def initialize(
       base: "origin/main",
@@ -117,9 +121,8 @@ module Speccloak
     end
 
     def find_changed_files
-      tracked_files = @cmd_runner.call("git diff --name-only #{@base}").split("\n")
-      @untracked_files = @cmd_runner.call("git ls-files --others --exclude-standard").split("\n")
-      changed_files = (tracked_files + @untracked_files).uniq
+      finder = Speccloak::FileFinder.new(@cmd_runner, @base)
+      changed_files = finder.changed_files
 
       # changed_files.reject! { |file| excluded_file?(file) }
 
@@ -170,6 +173,7 @@ module Speccloak
 
     def extract_changed_lines(file)
       return all_line_numbers(file) if untracked_file?(file)
+
       changed_lines_from_diff(file)
     end
 
