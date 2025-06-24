@@ -1,9 +1,5 @@
 # Speccloak
 
-[![CI](https://github.com/alpinesarecool/speccloak/actions/workflows/main.yml/badge.svg)](https://github.com/alpinesarecool/speccloak/actions)
-[![Gem Version](https://badge.fury.io/rb/speccloak.svg)](https://badge.fury.io/rb/speccloak)
-[![Coverage Status](https://coveralls.io/repos/github/alpinesarecool/speccloak/badge.svg?branch=master)](https://coveralls.io/github/alpinesarecool/speccloak?branch=master)
-
 **Speccloak** is a lightweight CLI tool that checks if the lines you've changed in your Git branch are covered by your test suite. ...
 
 **Speccloak** is a lightweight CLI tool that checks if the lines you've changed in your Git branch are covered by your test suite. It helps you prevent untested changes from creeping into the codebase — effortlessly.
