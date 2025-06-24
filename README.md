@@ -1,7 +1,5 @@
 # Speccloak
 
-**Speccloak** is a lightweight CLI tool that checks if the lines you've changed in your Git branch are covered by your test suite. ...
-
 **Speccloak** is a lightweight CLI tool that checks if the lines you've changed in your Git branch are covered by your test suite. It helps you prevent untested changes from creeping into the codebase — effortlessly.
 
 ---
