@@ -17,6 +17,8 @@ jobs:
           - '3.3.5'
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch main branch
+        run: git fetch origin main:refs/remotes/origin/main
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
