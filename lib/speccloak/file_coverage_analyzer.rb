@@ -20,13 +20,5 @@ module Speccloak
           @lines_data[line_num - 1].positive?
       end
     end
-
-    def hello
-      if 2===1
-        puts "Hello from FileCoverageAnalyzer"
-      else
-        puts "This will never be printed"
-      end
-    end
   end
 end
