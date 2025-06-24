@@ -87,6 +87,17 @@ RSpec.describe Speccloak::CoverageReporter do
         expect(output).to include("Line 1")
         expect(output).to include("puts 'hi'")
       end
+
+      it "prints a message when the uncovered line is not found in the file" do
+        reporter = described_class.new([{ file: "foo.rb", lines: [10] }], 1, 0, "text")
+        allow(File).to receive(:exist?).with("foo.rb").and_return(true)
+        allow(File).to receive(:readlines).with("foo.rb").and_return(["puts 'hi'\n"]) # only 1 line
+
+        reporter.report_results
+        output = log_output.string
+        expect(output).to include("Line 10")
+        expect(output).to include("line not found in file")
+      end
     end
 
     context "when uncovered lines refer to a missing file" do

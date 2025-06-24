@@ -84,7 +84,7 @@ module Speccloak
     end
 
     def print_file_uncovered_lines(file, lines)
-      log("#{Colors::YELLOW}#{file}#{Colors::RESET}:")
+      log("\n#{Colors::YELLOW}#{file}#{Colors::RESET}:")
       if File.exist?(file)
         print_existing_file_lines(file, lines)
       else

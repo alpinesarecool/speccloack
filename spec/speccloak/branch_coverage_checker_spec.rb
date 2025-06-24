@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "tempfile"
 require "speccloak/branch_coverage_checker"
 
 RSpec.describe Speccloak::BranchCoverageChecker do
@@ -47,7 +48,17 @@ RSpec.describe Speccloak::BranchCoverageChecker do
     )
   end
 
-    describe "#initialize" do
+  describe "#initialize" do
+    it "uses the default cmd_runner and file_reader when not provided" do
+      checker = described_class.new
+      expect(checker.instance_variable_get(:@cmd_runner).call("echo hi")).to eq("hi\n")
+      # Create a temp file to test file_reader
+      Tempfile.create("speccloak_test") do |file|
+        file.write("abc")
+        file.rewind
+        expect(checker.instance_variable_get(:@file_reader).call(file.path)).to eq("abc")
+      end
+    end
     it "accepts custom exclude_patterns" do
       checker = described_class.new(exclude_patterns: ["foo.rb"])
       expect(checker.instance_variable_get(:@exclude_patterns)).to include(/foo.rb/)
@@ -65,7 +76,7 @@ RSpec.describe Speccloak::BranchCoverageChecker do
       expect(checker.instance_variable_get(:@file_reader)).to eq(fake_reader)
     end
   end
-  
+
   describe "#run" do
     context "when coverage file does not exist" do
       before { allow(File).to receive(:exist?).and_return(false) }
