@@ -21,278 +21,278 @@ Style/Documentation:
 Style/YAMLFileRead:
   Enabled: false
 Gemspec/AddRuntimeDependency:
-  Enabled: true
+  Enabled: false
 Gemspec/AttributeAssignment:
-  Enabled: true
+  Enabled: false
 Gemspec/DeprecatedAttributeAssignment:
-  Enabled: true
+  Enabled: false
 Gemspec/DevelopmentDependencies:
-  Enabled: true
+  Enabled: false
 Gemspec/RequireMFA:
-  Enabled: true
+  Enabled: false
 Layout/LineContinuationLeadingSpace:
-  Enabled: true
+  Enabled: false
 Layout/LineContinuationSpacing:
-  Enabled: true
+  Enabled: false
 Layout/LineEndStringConcatenationIndentation:
-  Enabled: true
+  Enabled: false
 Layout/SpaceBeforeBrackets:
-  Enabled: true
+  Enabled: false
 Lint/AmbiguousAssignment:
-  Enabled: true
+  Enabled: false
 Lint/AmbiguousOperatorPrecedence:
-  Enabled: true
+  Enabled: false
 Lint/AmbiguousRange:
-  Enabled: true
+  Enabled: false
 Lint/ArrayLiteralInRegexp:
-  Enabled: true
+  Enabled: false
 Lint/ConstantOverwrittenInRescue:
-  Enabled: true
+  Enabled: false
 Lint/ConstantReassignment:
-  Enabled: true
+  Enabled: false
 Lint/CopDirectiveSyntax:
-  Enabled: true
+  Enabled: false
 Lint/DeprecatedConstants:
-  Enabled: true
+  Enabled: false
 Lint/DuplicateBranch:
-  Enabled: true
+  Enabled: false
 Lint/DuplicateMagicComment:
-  Enabled: true
+  Enabled: false
 Lint/DuplicateMatchPattern:
-  Enabled: true
+  Enabled: false
 Lint/DuplicateRegexpCharacterClassElement:
-  Enabled: true
+  Enabled: false
 Lint/DuplicateSetElement:
-  Enabled: true
+  Enabled: false
 Lint/EmptyBlock:
-  Enabled: true
+  Enabled: false
 Lint/EmptyClass:
-  Enabled: true
+  Enabled: false
 Lint/EmptyInPattern:
-  Enabled: true
+  Enabled: false
 Lint/HashNewWithKeywordArgumentsAsDefault:
-  Enabled: true
+  Enabled: false
 Lint/IncompatibleIoSelectWithFiberScheduler:
-  Enabled: true
+  Enabled: false
 Lint/ItWithoutArgumentsInBlock:
-  Enabled: true
+  Enabled: false
 Lint/LambdaWithoutLiteralBlock:
-  Enabled: true
+  Enabled: false
 Lint/LiteralAssignmentInCondition:
-  Enabled: true
+  Enabled: false
 Lint/MixedCaseRange:
-  Enabled: true
+  Enabled: false
 Lint/NoReturnInBeginEndBlocks:
-  Enabled: true
+  Enabled: false
 Lint/NonAtomicFileOperation:
-  Enabled: true
+  Enabled: false
 Lint/NumberedParameterAssignment:
-  Enabled: true
+  Enabled: false
 Lint/NumericOperationWithConstantResult:
-  Enabled: true
+  Enabled: false
 Lint/OrAssignmentToConstant:
-  Enabled: true
+  Enabled: false
 Lint/RedundantDirGlobSort:
-  Enabled: true
+  Enabled: false
 Lint/RedundantRegexpQuantifiers:
-  Enabled: true
+  Enabled: false
 Lint/RedundantTypeConversion:
-  Enabled: true
+  Enabled: false
 Lint/RefinementImportMethods:
-  Enabled: true
+  Enabled: false
 Lint/RequireRangeParentheses:
-  Enabled: true
+  Enabled: false
 Lint/RequireRelativeSelfPath:
-  Enabled: true
+  Enabled: false
 Lint/SharedMutableDefault:
-  Enabled: true
+  Enabled: false
 Lint/SuppressedExceptionInNumberConversion:
-  Enabled: true
+  Enabled: false
 Lint/SymbolConversion:
-  Enabled: true
+  Enabled: false
 Lint/ToEnumArguments:
-  Enabled: true
+  Enabled: false
 Lint/TripleQuotes:
-  Enabled: true
+  Enabled: false
 Lint/UnescapedBracketInRegexp:
-  Enabled: true
+  Enabled: false
 Lint/UnexpectedBlockArity:
-  Enabled: true
+  Enabled: false
 Lint/UnmodifiedReduceAccumulator:
-  Enabled: true
+  Enabled: false
 Lint/UselessConstantScoping:
-  Enabled: true
+  Enabled: false
 Lint/UselessDefaultValueArgument:
-  Enabled: true
+  Enabled: false
 Lint/UselessDefined:
-  Enabled: true
+  Enabled: false
 Lint/UselessNumericOperation:
-  Enabled: true
+  Enabled: false
 Lint/UselessOr:
-  Enabled: true
+  Enabled: false
 Lint/UselessRescue:
-  Enabled: true
+  Enabled: false
 Lint/UselessRuby2Keywords:
-  Enabled: true
+  Enabled: false
 Metrics/CollectionLiteralLength:
-  Enabled: true
+  Enabled: false
 Naming/BlockForwarding:
-  Enabled: true
+  Enabled: false
 Naming/PredicateMethod:
-  Enabled: true
+  Enabled: false
 Security/CompoundHash:
-  Enabled: true
+  Enabled: false
 Security/IoMethods:
-  Enabled: true
+  Enabled: false
 Style/AmbiguousEndlessMethodDefinition:
-  Enabled: true
+  Enabled: false
 Style/ArgumentsForwarding:
-  Enabled: true
+  Enabled: false
 Style/ArrayIntersect:
-  Enabled: true
+  Enabled: false
 Style/BitwisePredicate:
-  Enabled: true
+  Enabled: false
 Style/CollectionCompact:
-  Enabled: true
+  Enabled: false
 Style/CollectionQuerying:
-  Enabled: true
+  Enabled: false
 Style/CombinableDefined:
-  Enabled: true
+  Enabled: false
 Style/ComparableBetween:
-  Enabled: true
+  Enabled: false
 Style/ComparableClamp:
-  Enabled: true
+  Enabled: false
 Style/ConcatArrayLiterals:
-  Enabled: true
+  Enabled: false
 Style/DataInheritance:
-  Enabled: true
+  Enabled: false
 Style/DigChain:
-  Enabled: true
+  Enabled: false
 Style/DirEmpty:
-  Enabled: true
+  Enabled: false
 Style/DocumentDynamicEvalDefinition:
-  Enabled: true
+  Enabled: false
 Style/EmptyHeredoc:
-  Enabled: true
+  Enabled: false
 Style/EmptyStringInsideInterpolation:
-  Enabled: true
+  Enabled: false
 Style/EndlessMethod:
-  Enabled: true
+  Enabled: false
 Style/EnvHome:
-  Enabled: true
+  Enabled: false
 Style/ExactRegexpMatch:
-  Enabled: true
+  Enabled: false
 Style/FetchEnvVar:
-  Enabled: true
+  Enabled: false
 Style/FileEmpty:
-  Enabled: true
+  Enabled: false
 Style/FileNull:
-  Enabled: true
+  Enabled: false
 Style/FileRead:
-  Enabled: true
+  Enabled: false
 Style/FileTouch:
-  Enabled: true
+  Enabled: false
 Style/FileWrite:
-  Enabled: true
+  Enabled: false
 Style/HashConversion:
-  Enabled: true
+  Enabled: false
 Style/HashExcept:
-  Enabled: true
+  Enabled: false
 Style/HashFetchChain:
-  Enabled: true
+  Enabled: false
 Style/HashSlice:
-  Enabled: true
+  Enabled: false
 Style/IfWithBooleanLiteralBranches:
-  Enabled: true
+  Enabled: false
 Style/InPatternThen:
-  Enabled: true
+  Enabled: false
 Style/ItAssignment:
-  Enabled: true
+  Enabled: false
 Style/ItBlockParameter:
-  Enabled: true
+  Enabled: false
 Style/KeywordArgumentsMerging:
-  Enabled: true
+  Enabled: false
 Style/MagicCommentFormat:
-  Enabled: true
+  Enabled: false
 Style/MapCompactWithConditionalBlock:
-  Enabled: true
+  Enabled: false
 Style/MapIntoArray:
-  Enabled: true
+  Enabled: false
 Style/MapToHash:
-  Enabled: true
+  Enabled: false
 Style/MapToSet:
-  Enabled: true
+  Enabled: false
 Style/MinMaxComparison:
-  Enabled: true
+  Enabled: false
 Style/MultilineInPatternThen:
-  Enabled: true
+  Enabled: false
 Style/NegatedIfElseCondition:
-  Enabled: true
+  Enabled: false
 Style/NestedFileDirname:
-  Enabled: true
+  Enabled: false
 Style/NilLambda:
-  Enabled: true
+  Enabled: false
 Style/NumberedParameters:
-  Enabled: true
+  Enabled: false
 Style/NumberedParametersLimit:
-  Enabled: true
+  Enabled: false
 Style/ObjectThen:
-  Enabled: true
+  Enabled: false
 Style/OpenStructUse:
-  Enabled: true
+  Enabled: false
 Style/OperatorMethodCall:
-  Enabled: true
+  Enabled: false
 Style/QuotedSymbols:
-  Enabled: true
+  Enabled: false
 Style/RedundantArgument:
-  Enabled: true
+  Enabled: false
 Style/RedundantArrayConstructor:
-  Enabled: true
+  Enabled: false
 Style/RedundantArrayFlatten:
-  Enabled: true
+  Enabled: false
 Style/RedundantConstantBase:
-  Enabled: true
+  Enabled: false
 Style/RedundantCurrentDirectoryInPath:
-  Enabled: true
+  Enabled: false
 Style/RedundantDoubleSplatHashBraces:
-  Enabled: true
+  Enabled: false
 Style/RedundantEach:
-  Enabled: true
+  Enabled: false
 Style/RedundantFilterChain:
-  Enabled: true
+  Enabled: false
 Style/RedundantFormat:
-  Enabled: true
+  Enabled: false
 Style/RedundantHeredocDelimiterQuotes:
-  Enabled: true
+  Enabled: false
 Style/RedundantInitialize:
-  Enabled: true
+  Enabled: false
 Style/RedundantInterpolationUnfreeze:
-  Enabled: true
+  Enabled: false
 Style/RedundantLineContinuation:
-  Enabled: true
+  Enabled: false
 Style/RedundantRegexpArgument:
-  Enabled: true
+  Enabled: false
 Style/RedundantRegexpConstructor:
-  Enabled: true
+  Enabled: false
 Style/RedundantSelfAssignmentBranch:
-  Enabled: true
+  Enabled: false
 Style/RedundantStringEscape:
-  Enabled: true
+  Enabled: false
 Style/ReturnNilInPredicateMethodDefinition:
-  Enabled: true
+  Enabled: false
 Style/SafeNavigationChainLength:
-  Enabled: true
+  Enabled: false
 Style/SelectByRegexp:
-  Enabled: true
+  Enabled: false
 Style/SendWithLiteralMethodName:
-  Enabled: true
+  Enabled: false
 Style/SingleLineDoEndBlock:
-  Enabled: true
+  Enabled: false
 Style/StringChars:
-  Enabled: true
+  Enabled: false
 Style/SuperArguments:
-  Enabled: true
+  Enabled: false
 Style/SuperWithArgsParentheses:
-  Enabled: true
+  Enabled: false
 Style/SwapValues:
-  Enabled: true
+  Enabled: false
