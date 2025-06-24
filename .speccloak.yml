@@ -1,0 +1,6 @@
+base: origin/main
+format: json
+exclude:
+  - "config/routes.rb"
+  - "db/schema.rb"
+  - "lib/tasks/"
