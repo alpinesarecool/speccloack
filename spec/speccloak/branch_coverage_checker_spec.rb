@@ -161,6 +161,59 @@ RSpec.describe Speccloak::BranchCoverageChecker do
         checker.send(:analyze_files, ["foo.rb"], "fake.json")
       end
     end
+
+    context "when there are uncovered lines in a changed file" do
+      it "logs uncovered lines and adds them to @uncovered_lines when there are uncovered lines" do
+        # Simulate coverage data with line 2 uncovered (0)
+        file_reader = lambda do |path|
+          if path.include?(".resultset.json")
+            {
+              "RSpec" => {
+                "coverage" => {
+                  File.expand_path("changed.rb") => { "lines" => [1, 0, 1] }
+                }
+              }
+            }.to_json
+          else
+            "line1\nline2\nline3\n"
+          end
+        end
+        
+        # Simulate that line 2 is changed (and uncovered)
+        cmd_runner = lambda do |cmd|
+          case cmd
+          when /diff --name-only/
+            "changed.rb\n"
+          when /ls-files/
+            ""
+          when /diff -U0/
+            "@@ -2,1 +2,1 @@\n+line2\n"
+          else
+            ""
+          end
+        end
+
+        checker = described_class.new(
+          base: "origin/main",
+          format: "text",
+          cmd_runner: cmd_runner,
+          file_reader: file_reader
+        )
+        allow(File).to receive(:exist?).and_return(true)
+        allow(File).to receive(:readlines).with("changed.rb").and_return(["line1\n", "line2\n", "line3\n"])
+        expect {
+          begin
+            checker.run
+          rescue SystemExit
+          end
+        }.to output(/Uncovered lines:.*2/m).to_stdout
+      
+        # Optionally, check that @uncovered_lines is set
+        expect(checker.instance_variable_get(:@uncovered_lines)).to include(
+          hash_including(file: "changed.rb", lines: [2])
+        )
+      end
+    end
   end
 end
 # rubocop:enable all
