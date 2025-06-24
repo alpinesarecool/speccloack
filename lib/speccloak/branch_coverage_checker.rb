@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 require "json"
+require_relative "changed_lines_extractor"
+require_relative "file_coverage_analyzer"
+require_relative "coverage_reporter"
 
 module Speccloak
   RED = "\e[31m"
@@ -36,160 +39,6 @@ module Speccloak
     end
   end
 
-  class FileCoverageAnalyzer
-    def initialize(lines_data, changed_lines)
-      @lines_data = lines_data
-      @changed_lines = changed_lines
-    end
-
-    def uncovered_lines
-      @changed_lines.select do |line_num|
-        line_num - 1 < @lines_data.size &&
-          !@lines_data[line_num - 1].nil? &&
-          @lines_data[line_num - 1].zero?
-      end
-    end
-
-    def covered_count
-      @changed_lines.count do |line_num|
-        line_num - 1 < @lines_data.size &&
-          !@lines_data[line_num - 1].nil? &&
-          @lines_data[line_num - 1].positive?
-      end
-    end
-
-    def hello
-      if 1===1
-        puts "Hello from FileCoverageAnalyzer"
-      else
-        puts "This will never be printed"
-      end
-    end
-  end
-
-  class CoverageReporter
-    RED = "\e[31m"
-    GREEN = "\e[32m"
-    YELLOW = "\e[33m"
-    BOLD = "\e[1m"
-    RESET = "\e[0m"
-
-    def initialize(uncovered_lines, total_changed_lines, covered_changed_lines, format)
-      @uncovered_lines = uncovered_lines
-      @total_changed_lines = total_changed_lines
-      @covered_changed_lines = covered_changed_lines
-      @format = format
-    end
-
-    def report_results
-      if @format == "json"
-        print_json_report
-      else
-        print_summary
-        if @uncovered_lines.any?
-          print_uncovered_details
-          puts "\n#{RED}Coverage check failed: Above lines are not covered by specs.#{RESET}"
-          exit(1)
-        else
-          puts "\n#{GREEN}Coverage check passed: All changed lines are covered by tests.#{RESET}"
-          exit(0)
-        end
-      end
-    end
-
-    private
-
-    def print_json_report
-      result = {
-        total_changed_lines: @total_changed_lines,
-        covered_changed_lines: @covered_changed_lines,
-        coverage_percent: (@total_changed_lines > 0 ? (@covered_changed_lines.to_f / @total_changed_lines * 100).round(2) : 0),
-        uncovered_files: @uncovered_lines.map do |item|
-          {
-            file: item[:file],
-            lines: item[:lines]
-          }
-        end
-      }
-
-      puts JSON.pretty_generate(result)
-
-      if @uncovered_lines.any?
-        exit(1)
-      else
-        exit(0)
-      end
-    end
-
-    def print_summary
-      print_summary_header
-      print_summary_stats
-      print_summary_coverage
-    end
-
-    def print_summary_header
-      puts "\n\n"
-      puts "----------------------------------------"
-      puts "BRANCH COVERAGE REPORT SUMMARY"
-      puts "----------------------------------------"
-    end
-
-    def print_summary_stats
-      puts "Total changed lines: #{@total_changed_lines}"
-      puts "Covered changed lines: #{@covered_changed_lines}"
-    end
-
-    def print_summary_coverage
-      covered_percentage = if @total_changed_lines.positive?
-                             (@covered_changed_lines.to_f / @total_changed_lines * 100).round(2)
-                           else
-                             0
-                           end
-      color = covered_percentage == 100 ? GREEN : RED
-      puts "Coverage percentage: #{color}#{covered_percentage}%#{RESET}"
-    end
-
-    def print_uncovered_details
-      puts "\nUncovered lines by file:"
-      @uncovered_lines.each do |item|
-        print_file_uncovered_lines(item[:file], item[:lines])
-      end
-    end
-
-    def print_file_uncovered_lines(file, lines)
-      puts "#{YELLOW}#{file}#{RESET}:"
-
-      if File.exist?(file)
-        print_existing_file_lines(file, lines)
-      else
-        print_missing_file_lines(lines)
-      end
-    end
-
-    def print_existing_file_lines(file, lines)
-      file_lines = File.readlines(file)
-
-      lines.each do |line_num|
-        if line_num <= file_lines.size
-          code = file_lines[line_num - 1].chomp.strip
-          puts "  #{RED}#{BOLD}Line #{line_num}#{RESET}: #{code}"
-        else
-          print_line_not_found(line_num)
-        end
-      end
-    end
-
-    def print_missing_file_lines(lines)
-      lines.each do |line_num|
-        puts "  #{RED}#{BOLD}Line #{line_num}#{RESET} not covered by tests"
-      end
-    end
-
-    def print_line_not_found(line_num)
-      puts "  #{RED}#{BOLD}Line #{line_num}#{RESET}: (line not found in file)"
-    end
-  end
-
   class BranchCoverageChecker
     def initialize(base: "origin/main", format: "text", exclude_patterns: [])
       @base = base
@@ -198,6 +47,7 @@ module Speccloak
       @total_changed_lines = 0
       @covered_changed_lines = 0
       @exclude_patterns = exclude_patterns.map { |p| /#{p}/ }
+      @untracked_files = []
     end
 
     def run
@@ -211,7 +61,7 @@ module Speccloak
       end
 
       analyze_files(changed_files, coverage_file)
-      CoverageReporter.new(@uncovered_lines, @total_changed_lines, @covered_changed_lines, @format).report_results
+      Speccloak::CoverageReporter.new(@uncovered_lines, @total_changed_lines, @covered_changed_lines, @format).report_results
     end
 
     private
@@ -239,7 +89,9 @@ module Speccloak
     end
 
     def find_changed_files
-      changed_files = `git diff --name-only #{@base}`.split("\n").select { |file| file.end_with?(RUBY_FILE_EXTENSION) }
+      tracked_files = `git diff --name-only #{@base}`.split("\n")
+      @untracked_files = `git ls-files --others --exclude-standard`.split("\n")
+      changed_files = (tracked_files + @untracked_files).uniq
       # changed_files.reject! { |file| excluded_file?(file) }
 
       puts "\n\nChanged files: \n#{changed_files.join("\n")}" unless changed_files.empty?
@@ -290,14 +142,19 @@ module Speccloak
 
     def extract_changed_lines(file)
       changed_lines = []
-      diff_output = `git diff -U0 #{@base} -- #{file}`
-      ChangedLinesExtractor.parse(diff_output, changed_lines)
+      if @untracked_files.include?(file)
+        File.foreach(file).with_index { |_, i| changed_lines << (i + 1) }
+      else
+        diff_output = `git diff -U0 #{@base} -- #{file}`
+        ChangedLinesExtractor.parse(diff_output, changed_lines)
+      end
+
       changed_lines
     end
 
     def check_file_coverage(file, file_coverage_data, changed_lines)
       lines_data = file_coverage_data["lines"]
-      analyzer = FileCoverageAnalyzer.new(lines_data, changed_lines)
+      analyzer = Speccloak::FileCoverageAnalyzer.new(lines_data, changed_lines)
       file_uncovered_lines = analyzer.uncovered_lines
       covered_count = analyzer.covered_count
 
@@ -316,24 +173,6 @@ module Speccloak
         puts "Uncovered lines: #{RED}#{uncovered_lines.join(", ")}#{RESET}"
       else
         puts "#{GREEN}All changed lines are covered!#{RESET}"
-      end
-    end
-  end
-
-  module ChangedLinesExtractor
-    def self.parse(diff_output, changed_lines)
-      diff_output.each_line do |line|
-        next unless line.start_with?("@@")
-
-        match = line.match(GIT_DIFF_HUNK_HEADER_PATTERN)
-        next unless match
-
-        start_line = match[1].to_i
-        line_count = match[2] ? match[2][1..].to_i : 1
-
-        (start_line...(start_line + line_count)).each do |line_num|
-          changed_lines << line_num
-        end
       end
     end
   end

@@ -2,6 +2,9 @@ PATH
   remote: .
   specs:
     speccloak (0.1.0)
+      json (~> 2.0)
+      optparse (~> 0.1)
+      yaml (~> 0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -19,6 +22,7 @@ GEM
     json (2.12.2)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
+    optparse (0.4.0)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
@@ -77,6 +81,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    yaml (0.3.0)
 
 PLATFORMS
   ruby
@@ -91,4 +96,4 @@ DEPENDENCIES
   speccloak!
 
 BUNDLED WITH
-   2.6.8
+   2.6.9
