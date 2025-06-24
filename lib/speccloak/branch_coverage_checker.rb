@@ -17,13 +17,14 @@ module Speccloak
 
   DEFAULT_EXCLUDED_PATTERNS = [
     ".bundle/",
-    "/lib/tasks",
     "db/schema.rb",
     "db/migrate",
     "config/routes.rb",
     "config/initializers",
     "db/seeds.rb",
-    "spec"
+    "spec.rb",
+    "spec/",
+    "^(?!.*\\.rb$).*"
   ].map { |pattern| /#{pattern}/ }
 
   def self.excluded_patterns
@@ -108,7 +109,7 @@ module Speccloak
       finder = Speccloak::FileFinder.new(@cmd_runner, @base)
       changed_files = finder.changed_files
 
-      # changed_files.reject! { |file| excluded_file?(file) }
+      changed_files.reject! { |file| excluded_file?(file) }
 
       log("\n\nChanged files: \n#{changed_files.join("\n")}") unless changed_files.empty?
       log("\n")

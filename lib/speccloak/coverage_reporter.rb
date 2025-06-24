@@ -71,7 +71,7 @@ module Speccloak
     end
 
     def coverage_percent
-      @total_changed_lines.positive? ? (@covered_changed_lines.to_f / @total_changed_lines * 100).round(2) : 0
+      @total_changed_lines.positive? ? (@covered_changed_lines.to_f / @total_changed_lines * 100).round(2) : 100
     end
 
     def coverage_color

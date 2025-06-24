@@ -15,7 +15,6 @@ jobs:
       matrix:
         ruby:
           - '3.3.5'
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby
@@ -27,3 +26,5 @@ jobs:
         run: bundle install --verbose
       - name: Run RSpec
         run: bundle exec rspec
+      - name: Run Branch Coverage
+        run: bundle exec exe/speccloak

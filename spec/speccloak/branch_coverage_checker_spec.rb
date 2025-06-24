@@ -47,6 +47,25 @@ RSpec.describe Speccloak::BranchCoverageChecker do
     )
   end
 
+    describe "#initialize" do
+    it "accepts custom exclude_patterns" do
+      checker = described_class.new(exclude_patterns: ["foo.rb"])
+      expect(checker.instance_variable_get(:@exclude_patterns)).to include(/foo.rb/)
+    end
+
+    it "uses the provided cmd_runner" do
+      fake_runner = ->(cmd) { "fake output" }
+      checker = described_class.new(cmd_runner: fake_runner)
+      expect(checker.instance_variable_get(:@cmd_runner)).to eq(fake_runner)
+    end
+
+    it "uses the provided file_reader" do
+      fake_reader = ->(path) { "fake file" }
+      checker = described_class.new(file_reader: fake_reader)
+      expect(checker.instance_variable_get(:@file_reader)).to eq(fake_reader)
+    end
+  end
+  
   describe "#run" do
     context "when coverage file does not exist" do
       before { allow(File).to receive(:exist?).and_return(false) }
