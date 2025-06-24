@@ -20,3 +20,8 @@ Style/Documentation:
 
 Style/YAMLFileRead:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - 'bin/console'
+    - 'exe/speccloak'
