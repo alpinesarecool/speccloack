@@ -118,7 +118,7 @@ jobs:
         run: bundle exec rspec
       - name: Run Speccloak branch coverage check
         run: bundle exec speccloak
-
+```
 ---
 
 ## Output
@@ -136,6 +136,7 @@ Total changed lines: 2
 Covered changed lines: 2
 Coverage percentage: 100%
 ```
+#### Sample output from github actions
 ![Screenshot 2025-06-24 235100](https://github.com/user-attachments/assets/f9a4bc5f-edbf-4668-899d-9538a92e3f70)
 
 ### When lines are uncovered
@@ -147,6 +148,7 @@ app/services/payment_handler.rb:
 
 Coverage check failed: Above lines are not covered by specs.
 ```
+#### Sample output from github actions
 ![Screenshot 2025-06-24 235014](https://github.com/user-attachments/assets/0c1b1280-71db-4e11-ac84-049b95b78922)
 
 ---
