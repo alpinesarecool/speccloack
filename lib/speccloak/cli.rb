@@ -1,26 +1,33 @@
 require "optparse"
+require "yaml"
 require_relative "branch_coverage_checker"
 
 module Speccloak
   class CLI
     def self.start(argv)
-      options = {
+      config = {
         base: "origin/main",
-        format: "text"
+        format: "text",
+        exclude: []
       }
+
+      if File.exist?(".speccloak.yml")
+        yaml_config = YAML.load_file(".speccloak.yml")
+        config.merge!(yaml_config.transform_keys(&:to_sym))
+      end
 
       parser = OptionParser.new do |opts|
         opts.banner = "Usage: speccloak [options]"
 
         opts.on("--base BRANCH", "Specify the base branch (default: origin/main)") do |branch|
-          options[:base] = branch
+          config[:base] = branch
         end
 
         opts.on("--format FORMAT", "Output format (text or json)") do |format|
-          options[:format] = format
+          config[:format] = format
         end
 
-        opts.on("-h", "--help", "Displays help") do
+        opts.on("-h", "--help", "Display help information") do
           puts opts
           exit
         end
@@ -28,7 +35,12 @@ module Speccloak
 
       parser.parse!(argv)
 
-      checker = BranchCoverageChecker.new(base: options[:base], format: options[:format])
+      checker = BranchCoverageChecker.new(
+        base: config[:base],
+        format: config[:format],
+        exclude_patterns: config[:exclude] || []
+      )
+
       checker.run
     end
   end

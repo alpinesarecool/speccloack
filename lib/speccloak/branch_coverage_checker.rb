@@ -17,7 +17,7 @@ module Speccloak
   RUBY_FILE_EXTENSION = ".rb"
   RESULTSET_FILE = ".resultset.json"
 
-  EXCLUDED_PATTERNS = [
+  DEFAULT_EXCLUDED_PATTERNS = [
     ".bundle/",
     "/lib/tasks",
     "db/schema.rb",
@@ -27,6 +27,14 @@ module Speccloak
     "db/seeds.rb",
     "spec"
   ].map { |pattern| /#{pattern}/ }
+
+  def self.excluded_patterns
+    if ENV["SPECLOAK_EXCLUDE"]
+      ENV["SPECLOAK_EXCLUDE"].split(",").map { |pattern| /#{pattern.strip}/ }
+    else
+      DEFAULT_EXCLUDED_PATTERNS
+    end
+  end
 
   class FileCoverageAnalyzer
     def initialize(lines_data, changed_lines)
@@ -183,12 +191,13 @@ module Speccloak
   end
 
   class BranchCoverageChecker
-    def initialize(base: "origin/main", format: "text")
+    def initialize(base: "origin/main", format: "text", exclude_patterns: [])
       @base = base
       @format = format
       @uncovered_lines = []
       @total_changed_lines = 0
       @covered_changed_lines = 0
+      @exclude_patterns = exclude_patterns.map { |p| /#{p}/ }
     end
 
     def run
@@ -254,7 +263,7 @@ module Speccloak
     end
 
     def excluded_file?(file)
-      EXCLUDED_PATTERNS.any? { |pattern| file.match?(pattern) }
+      (@exclude_patterns + EXCLUDED_PATTERNS).any? { |pattern| file.match?(pattern) }
     end
 
     def analyze_file(file, file_coverage)
