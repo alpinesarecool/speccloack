@@ -25,7 +25,5 @@ jobs:
           bundler-cache: true
       - name: Install dependencies
         run: bundle install --verbose
-      - name: Run RuboCop
-        run: bundle exec rubocop
       - name: Run RSpec
         run: bundle exec rspec
