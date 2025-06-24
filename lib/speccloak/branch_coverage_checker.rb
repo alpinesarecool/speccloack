@@ -96,13 +96,7 @@ module Speccloak
     end
 
     def build_coverage_dir
-      if ENV["CI"]
-        job = ENV["CIRCLE_JOB"] || ""
-        node = ENV["CIRCLE_NODE_INDEX"] || ""
-        File.join("tmp", "coverage", "#{job}_#{node}")
-      else
-        "coverage"
-      end
+      "coverage"
     end
 
     def find_changed_files
