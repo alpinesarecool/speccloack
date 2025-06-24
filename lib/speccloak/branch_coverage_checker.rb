@@ -49,7 +49,13 @@ module Speccloak
   end
 
   class BranchCoverageChecker
-    def initialize(base: "origin/main", format: "text", exclude_patterns: [])
+    def initialize(
+      base: "origin/main",
+      format: "text",
+      exclude_patterns: [],
+      cmd_runner: ->(cmd) { `#{cmd}` },
+      file_reader: ->(path) { File.read(path) }
+    )
       @base = base
       @format = format
       @uncovered_lines = []
@@ -57,15 +63,17 @@ module Speccloak
       @covered_changed_lines = 0
       @exclude_patterns = exclude_patterns.map { |p| /#{p}/ }
       @untracked_files = []
+      @cmd_runner = cmd_runner
+      @file_reader = file_reader
     end
 
     def run
       coverage_file = find_coverage_file
       return exit_with_status("Coverage file not found.", ExitCodes::FAILURE) unless coverage_file
-    
+
       changed_files = find_changed_files
       return exit_with_status("No Ruby files changed in this branch.", ExitCodes::SUCCESS) if changed_files.empty?
-    
+
       analyze_files(changed_files, coverage_file)
       report_results
     end
@@ -77,7 +85,7 @@ module Speccloak
     end
 
     def exit_with_status(message, code = ExitCodes::SUCCESS)
-      puts message
+      log(message)
       exit(code)
     end
 
@@ -93,7 +101,7 @@ module Speccloak
     def find_coverage_file
       coverage_file = File.join(build_coverage_dir, RESULTSET_FILE)
       return coverage_file if File.exist?(coverage_file)
-    
+
       log("Coverage file not found: #{coverage_file}")
       nil
     end
@@ -109,10 +117,10 @@ module Speccloak
     end
 
     def find_changed_files
-      tracked_files = `git diff --name-only #{@base}`.split("\n")
-      @untracked_files = `git ls-files --others --exclude-standard`.split("\n")
+      tracked_files = @cmd_runner.call("git diff --name-only #{@base}").split("\n")
+      @untracked_files = @cmd_runner.call("git ls-files --others --exclude-standard").split("\n")
       changed_files = (tracked_files + @untracked_files).uniq
-      
+
       # changed_files.reject! { |file| excluded_file?(file) }
 
       log("\n\nChanged files: \n#{changed_files.join("\n")}") unless changed_files.empty?
@@ -121,7 +129,7 @@ module Speccloak
     end
 
     def analyze_files(changed_files, coverage_file)
-      coverage_data = JSON.parse(File.read(coverage_file))
+      coverage_data = JSON.parse(@file_reader.call(coverage_file))
       file_coverage = extract_file_coverage(coverage_data)
 
       changed_files.each do |file|
@@ -152,7 +160,7 @@ module Speccloak
     end
 
     def excluded_file?(file)
-      (@exclude_patterns + EXCLUDED_PATTERNS).any? { |pattern| file.match?(pattern) }
+      (@exclude_patterns + DEFAULT_EXCLUDED_PATTERNS).any? { |pattern| file.match?(pattern) }
     end
 
     def print_file_change_info(file, changed_lines)
@@ -164,28 +172,26 @@ module Speccloak
       return all_line_numbers(file) if untracked_file?(file)
       changed_lines_from_diff(file)
     end
-    
+
     def all_line_numbers(file)
-      File.foreach(file).with_index.map { |_, i| i + 1 }
+      @file_reader.call(file).each_line.with_index.map { |_, i| i + 1 }
     end
-    
+
     def changed_lines_from_diff(file)
       changed_lines = []
-      ChangedLinesExtractor.parse(
-        `git diff -U0 #{@base} -- #{file}`,
-        changed_lines
-      )
+      diff_output = @cmd_runner.call("git diff -U0 #{@base} -- #{file}")
+      ChangedLinesExtractor.parse(diff_output, changed_lines)
       changed_lines
     end
 
     def untracked_file?(file)
       @untracked_files.include?(file)
     end
-    
+
     def check_file_coverage(file, file_coverage_data, changed_lines)
       lines_data = file_coverage_data["lines"]
       analyzer = FileCoverageAnalyzer.new(lines_data, changed_lines)
-      
+
       uncovered_lines = analyzer.uncovered_lines
       covered_count = analyzer.covered_count
 
@@ -200,7 +206,7 @@ module Speccloak
 
     def record_file_coverage_results(file, uncovered_lines)
       return log("#{Colors::GREEN}All changed lines are covered!#{Colors::RESET}") if uncovered_lines.empty?
-    
+
       @uncovered_lines << { file: file, lines: uncovered_lines }
       log("Uncovered lines: #{Colors::RED}#{uncovered_lines.join(", ")}#{Colors::RESET}")
     end
