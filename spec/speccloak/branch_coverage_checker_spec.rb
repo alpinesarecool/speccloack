@@ -262,6 +262,38 @@ RSpec.describe Speccloak::BranchCoverageChecker do
         }.to output(/No coverage data found for this file!/).to_stdout
       end
     end
+
+    context "when there are changed lines in an untracked file" do
+      it "calls file_reader and returns all line numbers" do
+        file_content = "line1\nline2\nline3\n"
+        file_reader = ->(path) { file_content }
+        cmd_runner = lambda do |cmd|
+          case cmd
+          when /diff --name-only/
+            ""
+          when /ls-files/
+            ""
+          else
+            ""
+          end
+        end
+      
+        checker = described_class.new(
+          base: "origin/main",
+          format: "text",
+          cmd_runner: cmd_runner,
+          file_reader: file_reader
+        )
+        # Simulate untracked file
+        checker.instance_variable_set(:@untracked_files, ["untracked.rb"])
+        allow(File).to receive(:exist?).and_return(true)
+        allow(File).to receive(:readlines).with("untracked.rb").and_return(file_content.lines)
+      
+        # Call extract_changed_lines directly to ensure coverage
+        result = checker.send(:extract_changed_lines, "untracked.rb")
+        expect(result).to eq([1, 2, 3])
+      end
+    end
   end
 end
 # rubocop:enable all
