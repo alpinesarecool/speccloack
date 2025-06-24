@@ -16,5 +16,7 @@ gem "rubocop"
 gem "simplecov", group: :test
 
 group :development, :test do
-  gem 'rubocop-rake', require: false
+  gem "rubocop-rake", require: false
 end
+
+gem "panolint"
