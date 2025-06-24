@@ -214,6 +214,54 @@ RSpec.describe Speccloak::BranchCoverageChecker do
         )
       end
     end
+
+    context "when a changed file has no coverage data" do
+      it "logs that no coverage data was found for the file" do
+        file_reader = lambda do |path|
+          if path.include?(".resultset.json")
+            {
+              "RSpec" => {
+                "coverage" => {
+                  File.expand_path("changed.rb") => { "lines" => [1, 1, 1] }
+                  # Note: We will check for a file not in this hash
+                }
+              }
+            }.to_json
+          else
+            "line1\nline2\nline3\n"
+          end
+        end
+      
+        cmd_runner = lambda do |cmd|
+          case cmd
+          when /diff --name-only/
+            "not_covered.rb\n"
+          when /ls-files/
+            ""
+          when /diff -U0/
+            "@@ -1,2 +1,2 @@\n+line1\n+line2\n"
+          else
+            ""
+          end
+        end
+      
+        checker = described_class.new(
+          base: "origin/main",
+          format: "text",
+          cmd_runner: cmd_runner,
+          file_reader: file_reader
+        )
+        allow(File).to receive(:exist?).and_return(true)
+        allow(File).to receive(:readlines).with("not_covered.rb").and_return(["line1\n", "line2\n", "line3\n"])
+      
+        expect {
+          begin
+            checker.run
+          rescue SystemExit
+          end
+        }.to output(/No coverage data found for this file!/).to_stdout
+      end
+    end
   end
 end
 # rubocop:enable all
