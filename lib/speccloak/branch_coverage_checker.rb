@@ -5,27 +5,10 @@ require_relative "changed_lines_extractor"
 require_relative "file_coverage_analyzer"
 require_relative "coverage_reporter"
 require_relative "file_finder"
+require_relative "helpers"
 
 # Main namespace for Speccloak branch coverage analysis and reporting tools.
 module Speccloak
-  module Colors
-    RED    = "\e[31m"
-    GREEN  = "\e[32m"
-    YELLOW = "\e[33m"
-    RESET  = "\e[0m"
-  end
-
-  module ExitCodes
-    SUCCESS = 0
-    FAILURE = 1
-  end
-
-  module GitCommands
-    CHANGED_FILES_CMD      = "git diff --name-only origin/main"
-    CHANGED_LINES_CMD_PREF = "git diff -U0 origin/main -- "
-    DIFF_HUNK_HEADER_REGEX = /@@ -\d+,?\d* \+(\d+)(,\d+)?/
-  end
-
   RSPEC_COVERAGE_KEY = "RSpec"
   UNIT_TESTS_COVERAGE_KEY = "unit_tests_0"
 
@@ -53,6 +36,7 @@ module Speccloak
 
   # Checks and reports branch coverage for changed/untracked files in a project.
   class BranchCoverageChecker
+    include Helpers
     def initialize(
       base: "origin/main",
       format: "text",

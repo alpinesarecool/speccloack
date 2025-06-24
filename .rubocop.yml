@@ -9,3 +9,8 @@ Style/StringLiteralsInInterpolation:
 
 Metrics/ClassLength:
   Max: 150
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+  Max: 100
