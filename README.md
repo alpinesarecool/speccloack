@@ -4,7 +4,7 @@
 
 ---
 
-## ✨ What It Does
+## What It Does
 
 * Compares your current branch with a base branch (e.g. `origin/main`)
 * Analyzes which lines have changed
@@ -15,7 +15,7 @@
 
 ---
 
-## 💾 Installation
+##  Installation
 
 ### From RubyGems (after publishing)
 
@@ -34,14 +34,14 @@ gem install ./speccloak-0.1.0.gem
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Create a `.speccloak.yml` in your project root:
 
 ```yaml
 base: origin/main         # The branch to diff against
 format: text              # text or json
-exclude:
+exclude:                  # Exclude these path from checking the coverage
   - db/migrate
   - spec/
   - config/initializers
@@ -51,7 +51,7 @@ You can override these via CLI options as well.
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ### Basic command
 
@@ -62,7 +62,7 @@ speccloak
 ### With CLI options
 
 ```bash
-speccloak --base origin/develop --format json
+speccloak --base origin/develop --format json --exclude []
 ```
 
 ### Show help
@@ -80,7 +80,7 @@ Usage: speccloak [options]
 
 ---
 
-## 🔍 Output
+## Output
 
 ### When everything is covered
 
@@ -108,7 +108,7 @@ Coverage check failed: Above lines are not covered by specs.
 
 ---
 
-## 🛠️ Development
+## Development
 
 To run the CLI directly from source:
 
@@ -118,7 +118,7 @@ bundle exec exe/speccloak
 
 ---
 
-## 📆 Releasing
+##  Releasing
 
 After bumping the version in `lib/speccloak/version.rb`:
 
@@ -129,7 +129,7 @@ gem push speccloak-<version>.gem
 
 ---
 
-## 📄 License
+##  License
 
 MIT © [Nitin Rajkumar Paruchuri](https://github.com/alpinesarecool)
 
@@ -140,15 +140,15 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-## 📝 Contributing
+##  Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/alpinesarecool/speccloak. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the code of conduct.
 
-## 📄 License
+##  License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
 Everyone interacting in the Speccloak project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/alpinesarecool/speccloak/blob/master/CODE_OF_CONDUCT.md).
-# speccloack
+
