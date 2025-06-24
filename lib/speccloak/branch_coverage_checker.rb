@@ -5,14 +5,23 @@ require_relative "file_coverage_analyzer"
 require_relative "coverage_reporter"
 
 module Speccloak
-  RED = "\e[31m"
-  GREEN = "\e[32m"
-  YELLOW = "\e[33m"
-  RESET = "\e[0m"
+  module Colors
+    RED    = "\e[31m".freeze
+    GREEN  = "\e[32m".freeze
+    YELLOW = "\e[33m".freeze
+    RESET  = "\e[0m".freeze
+  end
 
-  GIT_CHANGED_FILES_CMD = "git diff --name-only origin/main"
-  GIT_CHANGED_LINES_CMD_PREFIX = "git diff -U0 origin/main -- "
-  GIT_DIFF_HUNK_HEADER_PATTERN = /@@ -\d+,?\d* \+(\d+)(,\d+)?/
+  module ExitCodes
+    SUCCESS = 0
+    FAILURE = 1
+  end
+
+  module GitCommands
+    CHANGED_FILES_CMD      = "git diff --name-only origin/main"
+    CHANGED_LINES_CMD_PREF = "git diff -U0 origin/main -- "
+    DIFF_HUNK_HEADER_REGEX = /@@ -\d+,?\d* \+(\d+)(,\d+)?/
+  end
 
   RSPEC_COVERAGE_KEY = "RSpec"
   UNIT_TESTS_COVERAGE_KEY = "unit_tests_0"
@@ -52,37 +61,48 @@ module Speccloak
 
     def run
       coverage_file = find_coverage_file
-      exit(1) unless coverage_file
-
+      return exit_with_status("Coverage file not found.", Speccloak::ExitCodes::FAILURE) unless coverage_file
+    
       changed_files = find_changed_files
-      if changed_files.empty?
-        puts "No Ruby files changed in this branch."
-        exit(0)
-      end
-
+      return exit_with_status("No Ruby files changed in this branch.", Speccloak::ExitCodes::SUCCESS) if changed_files.empty?
+    
       analyze_files(changed_files, coverage_file)
-      Speccloak::CoverageReporter.new(@uncovered_lines, @total_changed_lines, @covered_changed_lines, @format).report_results
+      report_results
     end
 
     private
 
+    def log(message)
+      puts message
+    end
+
+    def exit_with_status(message, code = EXIT_SUCCESS)
+      puts message
+      exit(code)
+    end
+
+    def report_results
+      Speccloak::CoverageReporter.new(
+        @uncovered_lines,
+        @total_changed_lines,
+        @covered_changed_lines,
+        @format
+      ).report_results
+    end
+
     def find_coverage_file
-      coverage_dir = build_coverage_dir
-      coverage_file = "#{coverage_dir}/#{RESULTSET_FILE}"
-
-      unless File.exist?(coverage_file)
-        puts "Coverage file not found: #{coverage_file}"
-        return nil
-      end
-
-      coverage_file
+      coverage_file = File.join(build_coverage_dir, RESULTSET_FILE)
+      return coverage_file if File.exist?(coverage_file)
+    
+      log("Coverage file not found: #{coverage_file}")
+      nil
     end
 
     def build_coverage_dir
       if ENV["CI"]
         job = ENV["CIRCLE_JOB"] || ""
         node = ENV["CIRCLE_NODE_INDEX"] || ""
-        "tmp/coverage/#{job}_#{node}"
+        File.join("tmp", "coverage", "#{job}_#{node}")
       else
         "coverage"
       end
@@ -92,10 +112,11 @@ module Speccloak
       tracked_files = `git diff --name-only #{@base}`.split("\n")
       @untracked_files = `git ls-files --others --exclude-standard`.split("\n")
       changed_files = (tracked_files + @untracked_files).uniq
+      
       # changed_files.reject! { |file| excluded_file?(file) }
 
-      puts "\n\nChanged files: \n#{changed_files.join("\n")}" unless changed_files.empty?
-      puts "\n"
+      log("\n\nChanged files: \n#{changed_files.join("\n")}") unless changed_files.empty?
+      log("\n")
       changed_files
     end
 
@@ -106,16 +127,8 @@ module Speccloak
       changed_files.each do |file|
         analyze_file(file, file_coverage)
       end
-    end
-
-    def extract_file_coverage(coverage_data)
-      coverage_data.dig(RSPEC_COVERAGE_KEY, "coverage") ||
-        coverage_data.dig(UNIT_TESTS_COVERAGE_KEY, "coverage") ||
-        {}
-    end
-
-    def excluded_file?(file)
-      (@exclude_patterns + EXCLUDED_PATTERNS).any? { |pattern| file.match?(pattern) }
+    rescue JSON::ParserError => e
+      log("Error parsing coverage file: #{e.message}")
     end
 
     def analyze_file(file, file_coverage)
@@ -128,38 +141,54 @@ module Speccloak
       if file_coverage[absolute_path]
         check_file_coverage(file, file_coverage[absolute_path], changed_lines)
       else
-        puts "No coverage data found for this file!"
-        @uncovered_lines << { file: file, lines: changed_lines }
+        log("No coverage data found for this file!")
       end
+    end
+
+    def extract_file_coverage(coverage_data)
+      [RSPEC_COVERAGE_KEY, UNIT_TESTS_COVERAGE_KEY].find_map { |key| coverage_data.dig(key, "coverage") } || {}
+    end
+
+    def excluded_file?(file)
+      (@exclude_patterns + EXCLUDED_PATTERNS).any? { |pattern| file.match?(pattern) }
     end
 
     def print_file_change_info(file, changed_lines)
-      puts "\nFile: #{file}"
-      puts "Changed lines: #{changed_lines.join(", ")}"
+      log("\nFile: #{file}")
+      log("Changed lines: #{changed_lines.join(", ")}")
     end
 
-    # --- Extracted helpers below to reduce class length ---
-
     def extract_changed_lines(file)
+      return all_line_numbers(file) if untracked_file?(file)
+      changed_lines_from_diff(file)
+    end
+    
+    def all_line_numbers(file)
+      File.foreach(file).with_index.map { |_, i| i + 1 }
+    end
+    
+    def changed_lines_from_diff(file)
       changed_lines = []
-      if @untracked_files.include?(file)
-        File.foreach(file).with_index { |_, i| changed_lines << (i + 1) }
-      else
-        diff_output = `git diff -U0 #{@base} -- #{file}`
-        ChangedLinesExtractor.parse(diff_output, changed_lines)
-      end
-
+      Speccloak::ChangedLinesExtractor.parse(
+        `git diff -U0 #{@base} -- #{file}`,
+        changed_lines
+      )
       changed_lines
     end
 
+    def untracked_file?(file)
+      @untracked_files.include?(file)
+    end
+    
     def check_file_coverage(file, file_coverage_data, changed_lines)
       lines_data = file_coverage_data["lines"]
       analyzer = Speccloak::FileCoverageAnalyzer.new(lines_data, changed_lines)
-      file_uncovered_lines = analyzer.uncovered_lines
+      
+      uncovered_lines = analyzer.uncovered_lines
       covered_count = analyzer.covered_count
 
-      update_coverage_statistics(file_uncovered_lines.size, covered_count)
-      record_file_coverage_results(file, file_uncovered_lines)
+      update_coverage_statistics(uncovered_lines.size, covered_count)
+      record_file_coverage_results(file, uncovered_lines)
     end
 
     def update_coverage_statistics(uncovered_count, covered_count)
@@ -168,12 +197,10 @@ module Speccloak
     end
 
     def record_file_coverage_results(file, uncovered_lines)
-      if uncovered_lines.any?
-        @uncovered_lines << { file: file, lines: uncovered_lines }
-        puts "Uncovered lines: #{RED}#{uncovered_lines.join(", ")}#{RESET}"
-      else
-        puts "#{GREEN}All changed lines are covered!#{RESET}"
-      end
+      return log("#{Speccloak::Colors::GREEN}All changed lines are covered!#{Speccloak::Colors::RESET}") if uncovered_lines.empty?
+    
+      @uncovered_lines << { file: file, lines: uncovered_lines }
+      log("Uncovered lines: #{Speccloak::Colors::RED}#{uncovered_lines.join(", ")}#{Speccloak::Colors::RESET}")
     end
   end
 end
