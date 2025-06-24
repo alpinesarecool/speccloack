@@ -15,13 +15,18 @@ jobs:
       matrix:
         ruby:
           - '3.3.5'
-
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch main branch
+        run: git fetch origin main:refs/remotes/origin/main
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - name: Run the default task
-        run: bundle exec rake
+      - name: Install dependencies
+        run: bundle install --verbose
+      - name: Run RSpec
+        run: bundle exec rspec
+      - name: Run Branch Coverage
+        run: bundle exec exe/speccloak

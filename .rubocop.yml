@@ -1,8 +1,298 @@
+plugins:
+  - rubocop-rake
 AllCops:
-  TargetRubyVersion: 3.1
-
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/console'
+    - 'exe/speccloak'
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
+Metrics/ClassLength:
+  Max: 150
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+  Max: 100
+Style/Documentation:
+  Enabled: false
+Style/YAMLFileRead:
+  Enabled: false
+Gemspec/AddRuntimeDependency:
+  Enabled: false
+Gemspec/AttributeAssignment:
+  Enabled: false
+Gemspec/DeprecatedAttributeAssignment:
+  Enabled: false
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+Gemspec/RequireMFA:
+  Enabled: false
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+Layout/LineContinuationSpacing:
+  Enabled: false
+Layout/LineEndStringConcatenationIndentation:
+  Enabled: false
+Layout/SpaceBeforeBrackets:
+  Enabled: false
+Lint/AmbiguousAssignment:
+  Enabled: false
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: false
+Lint/AmbiguousRange:
+  Enabled: false
+Lint/ArrayLiteralInRegexp:
+  Enabled: false
+Lint/ConstantOverwrittenInRescue:
+  Enabled: false
+Lint/ConstantReassignment:
+  Enabled: false
+Lint/CopDirectiveSyntax:
+  Enabled: false
+Lint/DeprecatedConstants:
+  Enabled: false
+Lint/DuplicateBranch:
+  Enabled: false
+Lint/DuplicateMagicComment:
+  Enabled: false
+Lint/DuplicateMatchPattern:
+  Enabled: false
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: false
+Lint/DuplicateSetElement:
+  Enabled: false
+Lint/EmptyBlock:
+  Enabled: false
+Lint/EmptyClass:
+  Enabled: false
+Lint/EmptyInPattern:
+  Enabled: false
+Lint/HashNewWithKeywordArgumentsAsDefault:
+  Enabled: false
+Lint/IncompatibleIoSelectWithFiberScheduler:
+  Enabled: false
+Lint/ItWithoutArgumentsInBlock:
+  Enabled: false
+Lint/LambdaWithoutLiteralBlock:
+  Enabled: false
+Lint/LiteralAssignmentInCondition:
+  Enabled: false
+Lint/MixedCaseRange:
+  Enabled: false
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: false
+Lint/NonAtomicFileOperation:
+  Enabled: false
+Lint/NumberedParameterAssignment:
+  Enabled: false
+Lint/NumericOperationWithConstantResult:
+  Enabled: false
+Lint/OrAssignmentToConstant:
+  Enabled: false
+Lint/RedundantDirGlobSort:
+  Enabled: false
+Lint/RedundantRegexpQuantifiers:
+  Enabled: false
+Lint/RedundantTypeConversion:
+  Enabled: false
+Lint/RefinementImportMethods:
+  Enabled: false
+Lint/RequireRangeParentheses:
+  Enabled: false
+Lint/RequireRelativeSelfPath:
+  Enabled: false
+Lint/SharedMutableDefault:
+  Enabled: false
+Lint/SuppressedExceptionInNumberConversion:
+  Enabled: false
+Lint/SymbolConversion:
+  Enabled: false
+Lint/ToEnumArguments:
+  Enabled: false
+Lint/TripleQuotes:
+  Enabled: false
+Lint/UnescapedBracketInRegexp:
+  Enabled: false
+Lint/UnexpectedBlockArity:
+  Enabled: false
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: false
+Lint/UselessConstantScoping:
+  Enabled: false
+Lint/UselessDefaultValueArgument:
+  Enabled: false
+Lint/UselessDefined:
+  Enabled: false
+Lint/UselessNumericOperation:
+  Enabled: false
+Lint/UselessOr:
+  Enabled: false
+Lint/UselessRescue:
+  Enabled: false
+Lint/UselessRuby2Keywords:
+  Enabled: false
+Metrics/CollectionLiteralLength:
+  Enabled: false
+Naming/BlockForwarding:
+  Enabled: false
+Naming/PredicateMethod:
+  Enabled: false
+Security/CompoundHash:
+  Enabled: false
+Security/IoMethods:
+  Enabled: false
+Style/AmbiguousEndlessMethodDefinition:
+  Enabled: false
+Style/ArgumentsForwarding:
+  Enabled: false
+Style/ArrayIntersect:
+  Enabled: false
+Style/BitwisePredicate:
+  Enabled: false
+Style/CollectionCompact:
+  Enabled: false
+Style/CollectionQuerying:
+  Enabled: false
+Style/CombinableDefined:
+  Enabled: false
+Style/ComparableBetween:
+  Enabled: false
+Style/ComparableClamp:
+  Enabled: false
+Style/ConcatArrayLiterals:
+  Enabled: false
+Style/DataInheritance:
+  Enabled: false
+Style/DigChain:
+  Enabled: false
+Style/DirEmpty:
+  Enabled: false
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
+Style/EmptyHeredoc:
+  Enabled: false
+Style/EmptyStringInsideInterpolation:
+  Enabled: false
+Style/EndlessMethod:
+  Enabled: false
+Style/EnvHome:
+  Enabled: false
+Style/ExactRegexpMatch:
+  Enabled: false
+Style/FetchEnvVar:
+  Enabled: false
+Style/FileEmpty:
+  Enabled: false
+Style/FileNull:
+  Enabled: false
+Style/FileRead:
+  Enabled: false
+Style/FileTouch:
+  Enabled: false
+Style/FileWrite:
+  Enabled: false
+Style/HashConversion:
+  Enabled: false
+Style/HashExcept:
+  Enabled: false
+Style/HashFetchChain:
+  Enabled: false
+Style/HashSlice:
+  Enabled: false
+Style/IfWithBooleanLiteralBranches:
+  Enabled: false
+Style/InPatternThen:
+  Enabled: false
+Style/ItAssignment:
+  Enabled: false
+Style/ItBlockParameter:
+  Enabled: false
+Style/KeywordArgumentsMerging:
+  Enabled: false
+Style/MagicCommentFormat:
+  Enabled: false
+Style/MapCompactWithConditionalBlock:
+  Enabled: false
+Style/MapIntoArray:
+  Enabled: false
+Style/MapToHash:
+  Enabled: false
+Style/MapToSet:
+  Enabled: false
+Style/MinMaxComparison:
+  Enabled: false
+Style/MultilineInPatternThen:
+  Enabled: false
+Style/NegatedIfElseCondition:
+  Enabled: false
+Style/NestedFileDirname:
+  Enabled: false
+Style/NilLambda:
+  Enabled: false
+Style/NumberedParameters:
+  Enabled: false
+Style/NumberedParametersLimit:
+  Enabled: false
+Style/ObjectThen:
+  Enabled: false
+Style/OpenStructUse:
+  Enabled: false
+Style/OperatorMethodCall:
+  Enabled: false
+Style/QuotedSymbols:
+  Enabled: false
+Style/RedundantArgument:
+  Enabled: false
+Style/RedundantArrayConstructor:
+  Enabled: false
+Style/RedundantArrayFlatten:
+  Enabled: false
+Style/RedundantConstantBase:
+  Enabled: false
+Style/RedundantCurrentDirectoryInPath:
+  Enabled: false
+Style/RedundantDoubleSplatHashBraces:
+  Enabled: false
+Style/RedundantEach:
+  Enabled: false
+Style/RedundantFilterChain:
+  Enabled: false
+Style/RedundantFormat:
+  Enabled: false
+Style/RedundantHeredocDelimiterQuotes:
+  Enabled: false
+Style/RedundantInitialize:
+  Enabled: false
+Style/RedundantInterpolationUnfreeze:
+  Enabled: false
+Style/RedundantLineContinuation:
+  Enabled: false
+Style/RedundantRegexpArgument:
+  Enabled: false
+Style/RedundantRegexpConstructor:
+  Enabled: false
+Style/RedundantSelfAssignmentBranch:
+  Enabled: false
+Style/RedundantStringEscape:
+  Enabled: false
+Style/ReturnNilInPredicateMethodDefinition:
+  Enabled: false
+Style/SafeNavigationChainLength:
+  Enabled: false
+Style/SelectByRegexp:
+  Enabled: false
+Style/SendWithLiteralMethodName:
+  Enabled: false
+Style/SingleLineDoEndBlock:
+  Enabled: false
+Style/StringChars:
+  Enabled: false
+Style/SuperArguments:
+  Enabled: false
+Style/SuperWithArgsParentheses:
+  Enabled: false
+Style/SwapValues:
+  Enabled: false
