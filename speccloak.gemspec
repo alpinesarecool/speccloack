@@ -39,4 +39,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "json", "~> 2.0"
   spec.add_dependency "optparse", "~> 0.1"
   spec.add_dependency "yaml", "~> 0.1"
+
+  # Add these for development/test
+  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "simplecov"
 end
