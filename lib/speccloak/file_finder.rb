@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Speccloak
   class FileFinder
     def initialize(cmd_runner, base)

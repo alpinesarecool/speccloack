@@ -1,4 +1,6 @@
-module Speccloak  
+# frozen_string_literal: true
+
+module Speccloak
   class FileCoverageAnalyzer
     def initialize(lines_data, changed_lines)
       @lines_data = lines_data

@@ -1,3 +1,6 @@
+# rubocop:disable all
+# frozen_string_literal: true
+
 require "spec_helper"
 require "speccloak/branch_coverage_checker"
 
@@ -117,3 +120,4 @@ RSpec.describe Speccloak::BranchCoverageChecker do
     end
   end
 end
+# rubocop:enable all

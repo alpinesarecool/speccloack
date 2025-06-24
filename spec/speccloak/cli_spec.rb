@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "speccloak/cli"
 
@@ -8,19 +10,21 @@ RSpec.describe Speccloak::CLI do
     # Stub BranchCoverageChecker so we don't run the actual logic
     stub_const("Speccloak::BranchCoverageChecker", Class.new do
       attr_reader :args
+
       def initialize(args)
         @args = args
       end
-      def run; @ran = true; end
-      def ran?; @ran; end
+
+      def run = @ran = true
+      def ran? = @ran
     end)
   end
 
   it "uses default config when no options or config file are provided" do
     expect_any_instance_of(Speccloak::BranchCoverageChecker).to receive(:run)
-    expect {
+    expect do
       Speccloak::CLI.start(argv)
-    }.not_to raise_error
+    end.not_to raise_error
   end
 
   it "parses --base option" do

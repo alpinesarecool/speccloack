@@ -14,3 +14,6 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*_spec.rb'
   Max: 100
+
+Style/Documentation:
+  Enabled: false
