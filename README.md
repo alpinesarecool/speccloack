@@ -53,18 +53,6 @@ You can override these via CLI options as well.
 
 ##  Usage
 
-### Basic command
-
-```bash
-speccloak
-```
-
-### With CLI options
-
-```bash
-speccloak --base origin/develop --format json --exclude []
-```
-
 ### Show help
 
 ```bash
@@ -77,6 +65,59 @@ Usage: speccloak [options]
     --format FORMAT              Output format (text or json)
     -h, --help                   Display help information
 ```
+### Basic command
+
+```bash
+speccloak
+```
+
+### With CLI options
+
+```bash
+speccloak --base origin/develop --format json --exclude []
+```
+## Using Speccloak in CI (GitHub Actions)
+
+If you have added `speccloak` to your Gemfile:
+
+```ruby
+gem 'speccloak'
+```
+
+You can run Speccloak as part of your CI pipeline.  
+Here’s an example GitHub Actions step:
+
+```yaml
+- name: Install dependencies
+  run: bundle install --jobs 4 --retry 3
+
+- name: Run Speccloak branch coverage check
+  run: bundle exec speccloak
+```
+
+**Tip:**  
+- Make sure you have simplecov gem and when you run the specs it generates the coverage
+- Make sure your test suite runs before Speccloak so that coverage data is generated.
+- You can add this step after your `bundle exec rspec` or test step.
+
+**Example full workflow:**
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install
+      - name: Run tests
+        run: bundle exec rspec
+      - name: Run Speccloak branch coverage check
+        run: bundle exec speccloak
 
 ---
 
