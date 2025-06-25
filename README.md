@@ -14,6 +14,16 @@
 * Outputs results in `text` or `json`
 
 ---
+## Use Cases
+
+- *Code reviewers can skip worrying about if this lengthy PR changes has all of its lines covered by the specs.**
+- *Private methods are tested through the main method without stubbing them.**
+- *Developers get instant feedback on whether their changes are adequately tested before merging.**
+- *Teams can enforce branch coverage as a required CI check, preventing untested code from being merged.**
+- *Legacy codebases can incrementally improve coverage by focusing only on changed lines, not the entire project.**
+- *Helps maintain high code quality and confidence during refactoring or large-scale changes.**
+- *Automates the tedious process of manually checking coverage reports for every pull request.**
+---
 
 ##  Installation
 
