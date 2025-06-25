@@ -1,4 +1,10 @@
 # Speccloak
+<p>
+  <a href="https://rubygems.org/gems/speccloak"><img src="https://img.shields.io/gem/v/speccloak.svg" alt="Gem Version"></a>
+  <a href="https://github.com/alpinesarecool/speccloak/actions/workflows/ci.yml"><img src="https://github.com/alpinesarecool/speccloak/actions/workflows/ci.yml/badge.svg?branch=main" alt="Build Status"></a>
+  <a href="https://rubygems.org/gems/speccloak"><img src="https://img.shields.io/gem/dt/speccloak.svg" alt="Downloads"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+</p>
 
 **Speccloak** is a lightweight CLI tool that checks if the lines you've changed in your Git branch are covered by your test suite. It helps you prevent untested changes from creeping into the codebase — effortlessly.
 
