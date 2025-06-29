@@ -33,7 +33,7 @@
 
 ##  Installation
 
-### From RubyGems (after publishing)
+### From RubyGems
 
 ```bash
 gem install speccloak
