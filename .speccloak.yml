@@ -1,5 +1,5 @@
 base: origin/main
-format: 
+format: text
 exclude:
   - "config/routes.rb"
   - "db/schema.rb"

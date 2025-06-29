@@ -104,6 +104,21 @@ module Speccloak
       end
     end
 
+    def hello
+      if @format == "json"
+        log("Generating JSON report...")
+      else
+        log("Generating summary report...")
+      end
+      log("----------------------------------------")
+      log("BRANCH COVERAGE REPORT")
+      log("----------------------------------------")
+      log("Base branch: #{@base_branch}")
+      log("Format: #{@format}")
+      log("----------------------------------------")
+      log("\n") 
+    end
+
     def print_missing_file_lines(lines)
       lines.each { |line_num| log("#{Colors::RED}#{Colors::BOLD}Line #{line_num}#{Colors::RESET} not covered by tests") }
     end
